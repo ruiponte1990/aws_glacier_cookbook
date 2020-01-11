@@ -5,13 +5,11 @@ CHUNK_SIZE=104875
 hashSize=104875
 
 if [[ -z "${1}"]]; then
-	echo "No vault provided."
 	exit 1
 fi
 
 
 if [[ -z "${2}"]]; then
-	echo "No file provided."
 	exit 1
 fi
 
@@ -19,8 +17,6 @@ VAULT="${1}"
 ARCHIVE="${2}"
 
 ARCHIVE_SIZE=`cat "${ARCHIVE}" | wc --bytes`
-
-rm output.txt
 
 rm -rf TEMP
 
@@ -42,19 +38,13 @@ cd ../TEMP
 
 lastpartsize=`expr $(ls -l | tail -1 | awk '{print$6}' + 0`
 
-echo "lastpartsize: ${lastpartsize}"
-
 lastfile=$(ls -l | tail -1 | awk '{print$10}')
-
-echo "lastfile: ${lastfile}"
 
 cont=$(ls -l | wc -l)
 
 cnt=`expr $cont - 2`
 
 fileCount=$(ls -1 | grep "^chunk" | wc -l)
-
-echo "Total parts to upload: " $fileCount
 
 files=$(ls | grep "^chunk")
 
@@ -90,16 +80,9 @@ for f in files
 		openssl dgst -sha256 -binary ${f} > "hash${f:5}"
 	done
 
-echo "List Active Multipart Uploads:"
-echo "Verify that a connection is open:"
-
 aws glacier list-multipart-uploads --account-id - --vault-name $VAULT >> ../TEMP/commands.txt
 
-echo "commands.txt:"
-
 cat ../TEMP/commands.txt
-
-echo "Calculating tree hash..."
 
 while true; do
 	COUNT=`ls hash* | wc -l`
@@ -120,10 +103,7 @@ done
 
 cd ../TEMP
 
-echo "Finalizing..."
-aws glacier complete-multipart-upload --account-id - --vault-name $VAULT --upload-id $uploadId --checksum $TREE_HASH --archive-size $ARCHIVE_SIZE >>commands.txt
-cp commands.txt ouput.txt
-mv output.txt ..
+archiveId=$(aws glacier complete-multipart-upload --account-id - --vault-name $VAULT --upload-id $uploadId --checksum $TREE_HASH --archive-size $ARCHIVE_SIZE | jq '.archiveId')
 RETVAL=$?
 if [[${RETVAL} -ne 0]]; then
 	echo "complete-multipart-upload failed with status code: ${RETVAL}" >> commands.txt
@@ -134,5 +114,5 @@ fi
 
 rm commands.txt
 
-echo "Done."
+echo "${ARCHIVE}: ${archiveId}"
 
