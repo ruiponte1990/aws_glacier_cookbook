@@ -4,9 +4,17 @@
 
 sh smallFile.sh vault_name file_name
 
-## cancel.sh
+## Canceling an upload
 
-sh cancel.sh vault_name file_name
+### step 1: listUploads.sh
+
+sh listUploads.sh vault_name
+
+get your uploadId from uploads.txt
+
+### step 2: cancel.sh
+
+sh cancel.sh vault_name upload_id
 
 ## sendAll.sh
 
