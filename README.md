@@ -10,7 +10,7 @@ sh cancel.sh vault_name file_name
 
 ## sendAll.sh
 
-sh sendAll.sh vault_name \*.file_extension
+sh sendAll.sh vault_name \\*.file_extension
 
 ## multipart.sh
 
