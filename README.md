@@ -20,7 +20,7 @@ sh multipart.sh vault_name file_name
 
 sh deleteVault.sh vault_name
 
-## Deleting an archive'
+## Deleting an archive
 
 ### step 1: initRetrievalJob.sh
 
