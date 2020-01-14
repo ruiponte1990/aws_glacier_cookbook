@@ -1,3 +1,4 @@
+#!/bin/bash
 VAULT="${1}"
 ARCHIVE="${2}"
 
