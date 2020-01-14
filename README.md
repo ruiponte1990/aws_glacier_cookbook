@@ -34,6 +34,8 @@ sh getJobOutput.sh vault_name job_id out_file_name
 
 now you can see the archiveId's and their labels
 
+### step 3: getJobOutput.sh
+
 ### deleteArchive.sh
 
 sh deleteArchive.sh vault_name archive_id
