@@ -10,7 +10,7 @@ sh cancel.sh vault_name file_name
 
 ## sendAll.sh
 
-sh sendAll.sh vault_name \*.file_extension
+sh sendAll.sh vault_name \\*.file_extension
 
 ## multipart.sh
 
@@ -20,9 +20,23 @@ sh multipart.sh vault_name file_name
 
 sh deleteVault.sh vault_name
 
-## deleteArchive.sh
+## Deleting an archive'
 
-sh deleteArchive.sh vault_name file_name
+### step 1: initRetrievalJob.sh
+
+sh initRetrievalJob.sh vault_name
+
+get jobId from jobId.txt
+
+### step 2: getJobOutput.sh
+
+sh getJobOutput.sh vault_name job_id out_file_name
+
+now you can see the archiveId's and their labels
+
+### deleteArchive.sh
+
+sh deleteArchive.sh vault_name archive_id
 
 ## Downloading an archive
 
@@ -40,7 +54,7 @@ now you can see the archiveId's and their labels
 
 ### step 3: initArchiveRetrievalJob.sh
 
-sh initArchiveRetrievalJob.sh vault_name
+sh initArchiveRetrievalJob.sh vault_name archive_id
 
 get jobId from jobId.txt
 
